@@ -1,3 +1,6 @@
+using Management.Contracts;
+using Management.Service.Log;
+
 namespace Management.Api.Extensions;
 
 public static class ServiceExtensions
@@ -8,4 +11,7 @@ public static class ServiceExtensions
                     builder.AllowAnyOrigin()
                         .AllowAnyMethod()
                         .AllowAnyHeader()));
+
+    public static void ConfigureLogging(this IServiceCollection services) =>
+        services.AddSingleton<ILoggerManager, LoggerManager>();
 }
