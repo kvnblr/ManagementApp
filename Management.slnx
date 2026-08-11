@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="Management.Api/Management.Api.csproj" />
+  <Project Path="Management.Service.Log/Management.Service.Log.csproj" />
 </Solution>
