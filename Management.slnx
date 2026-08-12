@@ -2,5 +2,6 @@
   <Project Path="Management.Api/Management.Api.csproj" />
   <Project Path="Management.Contracts/Management.Contracts.csproj" />
   <Project Path="Management.Entities/Management.Entities.csproj" />
+  <Project Path="Management.Repository/Management.Repository.csproj" />
   <Project Path="Management.Service.Log/Management.Service.Log.csproj" />
 </Solution>
