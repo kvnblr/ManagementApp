@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
     <ProjectReference Include="..\Management.Service.Log\Management.Service.Log.csproj" />
@@ -8,6 +8,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>7ba948fe-031d-47a8-900d-cd0edb16b868</UserSecretsId>
   </PropertyGroup>
 
 </Project>
