@@ -3,6 +3,7 @@ using Management.Repository;
 using Management.Service;
 using Management.Service.Contracts;
 using Management.Service.Log;
+using Microsoft.EntityFrameworkCore;
 
 namespace Management.Api.Extensions;
 
@@ -23,4 +24,7 @@ public static class ServiceExtensions
 
     public static void ConfigureServiceManager(this IServiceCollection services) =>
         services.AddScoped<IServiceManager, ServiceManager>();
+
+    public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration) =>
+        services.AddDbContext<RepositoryContext>(opts => opts.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 }
