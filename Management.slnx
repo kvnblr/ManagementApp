@@ -3,5 +3,6 @@
   <Project Path="Management.Contracts/Management.Contracts.csproj" />
   <Project Path="Management.Entities/Management.Entities.csproj" />
   <Project Path="Management.Repository/Management.Repository.csproj" />
+  <Project Path="Management.Service.Contracts/Management.Service.Contracts.csproj" />
   <Project Path="Management.Service.Log/Management.Service.Log.csproj" />
 </Solution>
