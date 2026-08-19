@@ -1,4 +1,5 @@
 using Management.Contracts;
+using Management.Repository;
 using Management.Service.Log;
 
 namespace Management.Api.Extensions;
@@ -14,4 +15,7 @@ public static class ServiceExtensions
 
     public static void ConfigureLogging(this IServiceCollection services) =>
         services.AddSingleton<ILoggerManager, LoggerManager>();
+
+    public static void ConfigureRepositoryManager(this IServiceCollection services) =>
+        services.AddScoped<IRepositoryManager, RepositoryManager>();
 }
