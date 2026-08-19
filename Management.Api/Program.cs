@@ -10,6 +10,7 @@ builder.Services.ConfigureCors();
 builder.Services.ConfigureLogging();
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
+builder.Services.ConfigureDbContext(builder.Configuration);
 
 var app = builder.Build();
 
