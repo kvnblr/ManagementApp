@@ -5,4 +5,5 @@
   <Project Path="Management.Repository/Management.Repository.csproj" />
   <Project Path="Management.Service.Contracts/Management.Service.Contracts.csproj" />
   <Project Path="Management.Service.Log/Management.Service.Log.csproj" />
+  <Project Path="Management.Service/Management.Service.csproj" />
 </Solution>
