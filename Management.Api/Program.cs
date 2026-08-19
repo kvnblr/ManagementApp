@@ -8,6 +8,7 @@ LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentD
 
 builder.Services.ConfigureCors();
 builder.Services.ConfigureLogging();
+builder.Services.ConfigureRepositoryManager();
 
 var app = builder.Build();
 
