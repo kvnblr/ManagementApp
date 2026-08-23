@@ -4,6 +4,7 @@
     <ProjectReference Include="..\Management.Service.Log\Management.Service.Log.csproj" />
     <ProjectReference Include="..\Management.Repository\Management.Repository.csproj" />
     <ProjectReference Include="..\Management.Service\Management.Service.csproj" />
+    <ProjectReference Include="..\Management.Presentation\Management.Presentation.csproj" />
   </ItemGroup>
 
   <ItemGroup>
