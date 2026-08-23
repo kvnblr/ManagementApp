@@ -1,4 +1,5 @@
 using Management.Api.Extensions;
+using Management.Presentation;
 using Microsoft.AspNetCore.HttpOverrides;
 using NLog;
 
@@ -11,6 +12,8 @@ builder.Services.ConfigureLogging();
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureDbContext(builder.Configuration);
+builder.Services.AddControllers()
+    .AddApplicationPart(typeof(AssemblyReference).Assembly);
 
 var app = builder.Build();
 
