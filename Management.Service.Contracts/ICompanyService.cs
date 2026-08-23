@@ -1,3 +1,8 @@
+using Management.Entities.Models;
+
 namespace Management.Service.Contracts;
 
-public interface ICompanyService { }
+public interface ICompanyService
+{
+    IEnumerable<Company> GetAllCompanies(bool trackChanges);
+}
