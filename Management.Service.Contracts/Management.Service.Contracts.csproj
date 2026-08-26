@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Management.Entities\Management.Entities.csproj" />
+    <ProjectReference Include="..\Management.Shared\Management.Shared.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
