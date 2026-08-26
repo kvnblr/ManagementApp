@@ -1,17 +1,20 @@
+using AutoMapper;
 using Management.Contracts;
-using Management.Entities.Models;
 using Management.Service.Contracts;
+using Management.Shared.DataTransferObjects;
 
 namespace Management.Service;
 
 internal sealed class CompanyService(
         IRepositoryManager repositoryManager,
-        ILoggerManager loggerManager)
+        ILoggerManager loggerManager,
+        IMapper mapper)
     : ICompanyService
 {
-    public IEnumerable<Company> GetAllCompanies(bool trackChanges)
+    public IEnumerable<CompanyDto> GetAllCompanies(bool trackChanges)
     {
         var companies = repositoryManager.Company.GetAllCompanies(trackChanges);
-        return companies;
+        var companiesDto = mapper.Map<IEnumerable<CompanyDto>>(companies);
+        return companiesDto;
     }
 }
