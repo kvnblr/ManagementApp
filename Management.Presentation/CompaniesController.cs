@@ -15,4 +15,10 @@ public class CompaniesController(IServiceManager service) : ControllerBase
         return Ok(companies);
     }
 
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetCompany(Guid id)
+    {
+        var company = service.Company.GetCompany(id, trackChanges: false);
+        return Ok(company);
+    }
 }
