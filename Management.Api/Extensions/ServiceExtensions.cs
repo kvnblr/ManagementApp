@@ -35,6 +35,7 @@ public static class ServiceExtensions
         services.AddControllers(cfg =>
         {
             cfg.RespectBrowserAcceptHeader = true;
+            cfg.ReturnHttpNotAcceptable = true;
         }).AddXmlSerializerFormatters()
             .AddApplicationPart(typeof(AssemblyReference).Assembly);
 
