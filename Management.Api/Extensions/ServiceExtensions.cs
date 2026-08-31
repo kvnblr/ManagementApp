@@ -1,3 +1,4 @@
+using System.Reflection.Metadata;
 using Management.Contracts;
 using Management.Entities.Models;
 using Management.Repository;
@@ -29,6 +30,13 @@ public static class ServiceExtensions
 
     public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration) =>
         services.AddDbContext<RepositoryContext>(opts => opts.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+
+    public static void ConfigureControllers(this IServiceCollection services) =>
+        services.AddControllers(cfg =>
+        {
+            cfg.RespectBrowserAcceptHeader = true;
+        }).AddXmlSerializerFormatters()
+            .AddApplicationPart(typeof(AssemblyReference).Assembly);
 
     public static void ConfigureAutoMapping(this IServiceCollection services) =>
         services.AddAutoMapper(cfg =>
