@@ -42,8 +42,7 @@ public static class ServiceExtensions
         services.AddAutoMapper(cfg =>
         {
             cfg.CreateMap<Company, CompanyDto>()
-            .ForCtorParam("FullAddress", opt => opt.MapFrom(x => x.Address + " " + x.Country));
-            // .ForMember(c => c.FullAddress, opt => opt.MapFrom(x => x.Address + " " + x.Country));
+            .ForMember(c => c.FullAddress, opt => opt.MapFrom(x => x.Address + " " + x.Country));
 
             cfg.CreateMap<Employee, EmployeeDto>();
         }, typeof(Program));
