@@ -14,4 +14,11 @@ public class EmployeesController(IServiceManager serviceManager) : ControllerBas
         return Ok(employees);
     }
 
+    [HttpGet("{id:guid}")]
+    public IActionResult GetEmployeeForCompany(Guid companyId, Guid id)
+    {
+        var employee = serviceManager.Employee.GetEmployee(companyId, id, trackChanges: false);
+        return Ok(employee);
+    }
+
 }
