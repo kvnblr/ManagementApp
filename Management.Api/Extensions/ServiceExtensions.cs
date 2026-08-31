@@ -1,4 +1,5 @@
 using System.Reflection.Metadata;
+using Management.Api.Formatter;
 using Management.Contracts;
 using Management.Entities.Models;
 using Management.Repository;
@@ -31,12 +32,16 @@ public static class ServiceExtensions
     public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration) =>
         services.AddDbContext<RepositoryContext>(opts => opts.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
+    public static IMvcBuilder AddCustomCsvFormatter(this IMvcBuilder builder) =>
+        builder.AddMvcOptions(cfg => cfg.OutputFormatters.Add(new CsvOutputFormatter()));
+
     public static void ConfigureControllers(this IServiceCollection services) =>
         services.AddControllers(cfg =>
         {
             cfg.RespectBrowserAcceptHeader = true;
             cfg.ReturnHttpNotAcceptable = true;
         }).AddXmlSerializerFormatters()
+            .AddCustomCsvFormatter()
             .AddApplicationPart(typeof(AssemblyReference).Assembly);
 
     public static void ConfigureAutoMapping(this IServiceCollection services) =>
