@@ -52,6 +52,7 @@ public static class ServiceExtensions
             cfg.CreateMap<CompanyForCreationDto, Company>();
 
             cfg.CreateMap<Employee, EmployeeDto>();
+            cfg.CreateMap<EmployeeForCreationDto, Employee>();
 
         }, typeof(Program));
 }
