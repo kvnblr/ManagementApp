@@ -1,4 +1,5 @@
 using Management.Service.Contracts;
+using Management.Shared.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Management.Presentation;
@@ -20,5 +21,14 @@ public class CompaniesController(IServiceManager service) : ControllerBase
     {
         var company = service.Company.GetCompany(id, trackChanges: false);
         return Ok(company);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateCompany([FromBody] CompanyForCreationDto companyForCreation)
+    {
+        if (companyForCreation is null) return BadRequest("CompanyForCreationDto object is null");
+
+        var company = service.Company.CreateCompany(companyForCreation);
+        return CreatedAtRoute("CompanyById", new { id = company.Id }, company);
     }
 }
