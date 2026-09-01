@@ -49,7 +49,9 @@ public static class ServiceExtensions
         {
             cfg.CreateMap<Company, CompanyDto>()
             .ForMember(c => c.FullAddress, opt => opt.MapFrom(x => x.Address + " " + x.Country));
+            cfg.CreateMap<CompanyForCreationDto, Company>();
 
             cfg.CreateMap<Employee, EmployeeDto>();
+
         }, typeof(Program));
 }
