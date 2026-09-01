@@ -15,7 +15,7 @@ public class CompaniesController(IServiceManager service) : ControllerBase
         return Ok(companies);
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id:guid}", Name = "CompanyById")]
     public async Task<IActionResult> GetCompany(Guid id)
     {
         var company = service.Company.GetCompany(id, trackChanges: false);
