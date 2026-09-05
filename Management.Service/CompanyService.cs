@@ -25,6 +25,23 @@ internal sealed class CompanyService(
         return companyDto;
     }
 
+    public (IEnumerable<CompanyDto> companies, string ids) CreateCompanyCollection(IEnumerable<CompanyForCreationDto> companyCollection)
+    {
+        if (companyCollection is null)
+            throw new CompanyCollectionBadRequest();
+
+        var companies = mapper.Map<IEnumerable<Company>>(companyCollection);
+        foreach (var company in companies)
+            repositoryManager.Company.CreateCompany(company);
+
+        repositoryManager.Save();
+
+        var companiesDto = mapper.Map<IEnumerable<CompanyDto>>(companies);
+        var ids = string.Join(",", companiesDto.Select(c => c.Id));
+
+        return (companiesDto, ids);
+    }
+
     public IEnumerable<CompanyDto> GetAllCompanies(bool trackChanges)
     {
         var companies = repositoryManager.Company.GetAllCompanies(trackChanges);
