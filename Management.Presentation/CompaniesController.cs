@@ -23,6 +23,13 @@ public class CompaniesController(IServiceManager service) : ControllerBase
         return Ok(company);
     }
 
+    [HttpGet("collection/({ids})", Name = "CompanyCollection")]
+    public async Task<IActionResult> GetCompanyCollection(IEnumerable<Guid> ids)
+    {
+        var companies = service.Company.GetByIds(ids, trackChanges: false);
+        return Ok(companies);
+    }
+
     [HttpPost]
     public async Task<IActionResult> CreateCompany([FromBody] CompanyForCreationDto companyForCreation)
     {
