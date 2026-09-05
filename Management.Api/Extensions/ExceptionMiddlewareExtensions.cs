@@ -1,6 +1,7 @@
 using System.Net;
 using Management.Contracts;
 using Management.Entities.ErrorDetails;
+using Management.Entities.ErrorModels.Exceptions;
 using Management.Entities.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 
@@ -22,6 +23,7 @@ public static class ExceptionMiddlewareExtensions
                     context.Response.StatusCode = contextFeature.Error switch
                     {
                         NotFoundException => StatusCodes.Status404NotFound,
+                        BadRequestException => StatusCodes.Status400BadRequest,
                         _ => StatusCodes.Status500InternalServerError
                     };
 
