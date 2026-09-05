@@ -1,5 +1,6 @@
 using AutoMapper;
 using Management.Contracts;
+using Management.Entities.ErrorModels.Exceptions;
 using Management.Entities.Exceptions;
 using Management.Entities.Models;
 using Management.Service.Contracts;
@@ -27,6 +28,18 @@ internal sealed class CompanyService(
     public IEnumerable<CompanyDto> GetAllCompanies(bool trackChanges)
     {
         var companies = repositoryManager.Company.GetAllCompanies(trackChanges);
+        var companiesDto = mapper.Map<IEnumerable<CompanyDto>>(companies);
+        return companiesDto;
+    }
+
+    public IEnumerable<CompanyDto> GetByIds(IEnumerable<Guid> ids, bool trackChanges)
+    {
+        if (ids is null)
+            throw new IdParametersBadRequestException();
+        var companies = repositoryManager.Company.GetByIds(ids, trackChanges);
+        if (ids.Count() != companies.Count())
+            throw new CollectionByIdsBadRequestException();
+
         var companiesDto = mapper.Map<IEnumerable<CompanyDto>>(companies);
         return companiesDto;
     }
