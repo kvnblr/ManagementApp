@@ -33,8 +33,8 @@ public class CompaniesController(IServiceManager service) : ControllerBase
     [HttpPost("collection")]
     public async Task<IActionResult> CreateCompanyCollection([FromBody] IEnumerable<CompanyForCreationDto> companyCollection)
     {
-        var collection = service.Company.CreateCompanyCollection(companyCollection);
-        return CreatedAtRoute("CompanyCollection", new { collection.ids }, collection.companies);
+        var (companies, ids) = service.Company.CreateCompanyCollection(companyCollection);
+        return CreatedAtRoute("CompanyCollection", new { ids }, companies);
     }
 
     [HttpPost]
