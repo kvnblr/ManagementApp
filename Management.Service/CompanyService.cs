@@ -1,6 +1,7 @@
 using AutoMapper;
 using Management.Contracts;
 using Management.Entities.Exceptions;
+using Management.Entities.Models;
 using Management.Service.Contracts;
 using Management.Shared.DataTransferObjects;
 
