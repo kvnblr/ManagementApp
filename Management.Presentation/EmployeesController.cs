@@ -32,4 +32,10 @@ public class EmployeesController(IServiceManager serviceManager) : ControllerBas
         return CreatedAtRoute(nameof(GetEmployeeForCompany), new { companyId, id = employee.Id }, employee);
     }
 
+    [HttpDelete("{id:guid}")]
+    public IActionResult DeleteEmployeeForCompany(Guid companyId, Guid id)
+    {
+        serviceManager.Employee.DeleteEmployeeForCompany(companyId, id, trackChanges: false);
+        return NoContent();
+    }
 }
