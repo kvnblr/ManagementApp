@@ -1,3 +1,4 @@
+using Management.Presentation.ModelBinders;
 using Management.Service.Contracts;
 using Management.Shared.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,7 @@ public class CompaniesController(IServiceManager service) : ControllerBase
     }
 
     [HttpGet("collection/({ids})", Name = "CompanyCollection")]
-    public async Task<IActionResult> GetCompanyCollection(IEnumerable<Guid> ids)
+    public async Task<IActionResult> GetCompanyCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<Guid> ids)
     {
         var companies = service.Company.GetByIds(ids, trackChanges: false);
         return Ok(companies);
