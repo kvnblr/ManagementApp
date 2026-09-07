@@ -75,4 +75,11 @@ internal sealed class CompanyService(
         var companyDto = mapper.Map<CompanyDto>(company);
         return companyDto;
     }
+
+    public void UpdateCompany(Guid id, CompanyForUpdateDto companyForUpdate, bool trackChanges)
+    {
+        var company = repositoryManager.Company.GetCompany(id, trackChanges) ?? throw new CompanyNotFoundException(id);
+        mapper.Map(companyForUpdate, company);
+        repositoryManager.Save();
+    }
 }
