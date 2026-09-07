@@ -38,4 +38,14 @@ public class EmployeesController(IServiceManager serviceManager) : ControllerBas
         serviceManager.Employee.DeleteEmployeeForCompany(companyId, id, trackChanges: false);
         return NoContent();
     }
+
+    [HttpPut("{id:guid}")]
+    public IActionResult UpdateEmployeeForCompany(Guid companyId, Guid id, [FromBody] EmployeeForUpdateDto employee)
+    {
+        if (employee is null)
+            return BadRequest("EmployeeForUpdateDto object is null.");
+
+        serviceManager.Employee.UpdateEmployeeForCompany(companyId, id, employee, employeeTrackChanges: false, companyTrackChanges: true);
+        return NoContent();
+    }
 }
