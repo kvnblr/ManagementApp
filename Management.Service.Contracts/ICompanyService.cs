@@ -10,4 +10,5 @@ public interface ICompanyService
     CompanyDto GetCompany(Guid id, bool trackChanges);
     CompanyDto CreateCompany(CompanyForCreationDto companyForCreation);
     void DeleteCompany(Guid id, bool trackChanges);
+    void UpdateCompany(Guid id, CompanyForUpdateDto companyForUpdate, bool trackChanges);
 }
