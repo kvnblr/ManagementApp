@@ -50,4 +50,12 @@ internal sealed class EmployeeService(
         var employeesDto = mapper.Map<IEnumerable<EmployeeDto>>(employees);
         return employeesDto;
     }
+
+    public void UpdateEmployeeForCompany(Guid companyId, Guid id, EmployeeForUpdateDto employeeForUpdate, bool employeeTrackChanges, bool companyTrackChanges)
+    {
+        var company = repositoryManager.Company.GetCompany(companyId, companyTrackChanges) ?? throw new CompanyNotFoundException(companyId);
+        var employee = repositoryManager.Employee.GetEmployee(companyId, id, employeeTrackChanges) ?? throw new EmployeeNotFoundException(id);
+        mapper.Map(employeeForUpdate, employee);
+        repositoryManager.Save();
+    }
 }
