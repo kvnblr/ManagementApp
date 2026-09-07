@@ -42,6 +42,13 @@ internal sealed class CompanyService(
         return (companiesDto, ids);
     }
 
+    public void DeleteCompany(Guid id, bool trackChanges)
+    {
+        var company = repositoryManager.Company.GetCompany(id, trackChanges) ?? throw new CompanyNotFoundException(id);
+        repositoryManager.Company.DeleteCompany(company);
+        repositoryManager.Save();
+    }
+
     public IEnumerable<CompanyDto> GetAllCompanies(bool trackChanges)
     {
         var companies = repositoryManager.Company.GetAllCompanies(trackChanges);
