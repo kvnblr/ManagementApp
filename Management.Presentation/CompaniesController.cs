@@ -46,4 +46,11 @@ public class CompaniesController(IServiceManager service) : ControllerBase
         var company = service.Company.CreateCompany(companyForCreation);
         return CreatedAtRoute("CompanyById", new { id = company.Id }, company);
     }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteCompany(Guid id)
+    {
+        service.Company.DeleteCompany(id, trackChanges: false);
+        return NoContent();
+    }
 }
