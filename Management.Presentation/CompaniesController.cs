@@ -53,4 +53,12 @@ public class CompaniesController(IServiceManager service) : ControllerBase
         service.Company.DeleteCompany(id, trackChanges: false);
         return NoContent();
     }
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdateCompany(Guid id, [FromBody] CompanyForUpdateDto company)
+    {
+        if (company is null) return BadRequest("CompanyForUpdateDto object is null.");
+        service.Company.UpdateCompany(id, company, trackChanges: true);
+        return NoContent();
+    }
 }
