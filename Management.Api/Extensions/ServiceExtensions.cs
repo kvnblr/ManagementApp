@@ -48,12 +48,12 @@ public static class ServiceExtensions
         services.AddAutoMapper(cfg =>
         {
             cfg.CreateMap<Company, CompanyDto>()
-            .ForMember(c => c.FullAddress, opt => opt.MapFrom(x => x.Address + " " + x.Country));
+                .ForMember(c => c.FullAddress, opt => opt.MapFrom(x => x.Address + " " + x.Country));
             cfg.CreateMap<CompanyForCreationDto, Company>();
+            cfg.CreateMap<CompanyForUpdateDto, Company>();
 
             cfg.CreateMap<Employee, EmployeeDto>();
             cfg.CreateMap<EmployeeForCreationDto, Employee>();
             cfg.CreateMap<EmployeeForUpdateDto, Employee>();
-
         }, typeof(Program));
 }
