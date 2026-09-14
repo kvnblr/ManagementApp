@@ -7,7 +7,10 @@ using Management.Service;
 using Management.Service.Contracts;
 using Management.Service.Log;
 using Management.Shared.DataTransferObjects;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Management.Api.Extensions;
 
@@ -40,6 +43,7 @@ public static class ServiceExtensions
         {
             cfg.RespectBrowserAcceptHeader = true;
             cfg.ReturnHttpNotAcceptable = true;
+            cfg.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
         }).AddXmlSerializerFormatters()
             .AddCustomCsvFormatter()
             .AddApplicationPart(typeof(AssemblyReference).Assembly);
@@ -56,4 +60,9 @@ public static class ServiceExtensions
             cfg.CreateMap<EmployeeForCreationDto, Employee>();
             cfg.CreateMap<EmployeeForUpdateDto, Employee>();
         }, typeof(Program));
+
+    private static NewtonsoftJsonInputFormatter GetJsonPatchInputFormatter() =>
+        new ServiceCollection().AddLogging().AddMvc().AddNewtonsoftJson()
+            .Services.BuildServiceProvider().GetRequiredService<IOptions<MvcOptions>>().Value.InputFormatters
+            .OfType<NewtonsoftJsonPatchInputFormatter>().First();
 }
