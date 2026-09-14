@@ -58,7 +58,7 @@ public static class ServiceExtensions
 
             cfg.CreateMap<Employee, EmployeeDto>();
             cfg.CreateMap<EmployeeForCreationDto, Employee>();
-            cfg.CreateMap<EmployeeForUpdateDto, Employee>();
+            cfg.CreateMap<EmployeeForUpdateDto, Employee>().ReverseMap();
         }, typeof(Program));
 
     private static NewtonsoftJsonInputFormatter GetJsonPatchInputFormatter() =>
