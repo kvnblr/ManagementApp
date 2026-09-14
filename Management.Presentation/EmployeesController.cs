@@ -27,6 +27,9 @@ public class EmployeesController(IServiceManager serviceManager) : ControllerBas
     {
         if (employeeForCreation is null) return BadRequest("EmployeeForCreation object is null");
 
+        if (!ModelState.IsValid)
+            return UnprocessableEntity();
+
         var employee = serviceManager.Employee.CreateEmployeeForCompany(companyId, employeeForCreation, trackChanges: false);
 
         return CreatedAtRoute(nameof(GetEmployeeForCompany), new { companyId, id = employee.Id }, employee);
