@@ -28,7 +28,7 @@ public class EmployeesController(IServiceManager serviceManager) : ControllerBas
         if (employeeForCreation is null) return BadRequest("EmployeeForCreation object is null");
 
         if (!ModelState.IsValid)
-            return UnprocessableEntity();
+            return UnprocessableEntity(ModelState);
 
         var employee = serviceManager.Employee.CreateEmployeeForCompany(companyId, employeeForCreation, trackChanges: false);
 
@@ -47,6 +47,9 @@ public class EmployeesController(IServiceManager serviceManager) : ControllerBas
     {
         if (employee is null)
             return BadRequest("EmployeeForUpdateDto object is null.");
+
+        if (!ModelState.IsValid)
+            return UnprocessableEntity(ModelState);
 
         serviceManager.Employee.UpdateEmployeeForCompany(companyId, id, employee, employeeTrackChanges: false, companyTrackChanges: true);
         return NoContent();
