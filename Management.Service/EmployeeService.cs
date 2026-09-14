@@ -60,6 +60,12 @@ internal sealed class EmployeeService(
         return employeesDto;
     }
 
+    public void SaveChangesForPatch(EmployeeForUpdateDto employeeToPatch, Employee employee)
+    {
+        mapper.Map(employeeToPatch, employee);
+        repositoryManager.Save();
+    }
+
     public void UpdateEmployeeForCompany(Guid companyId, Guid id, EmployeeForUpdateDto employeeForUpdate, bool employeeTrackChanges, bool companyTrackChanges)
     {
         var company = repositoryManager.Company.GetCompany(companyId, companyTrackChanges) ?? throw new CompanyNotFoundException(companyId);
