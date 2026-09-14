@@ -63,6 +63,11 @@ public class EmployeesController(IServiceManager serviceManager) : ControllerBas
         var (employeeToPatch, employee) = serviceManager.Employee.GetEmployeeForPatch(companyId, id, companyTrackChanges: false, employeeTrackChanges: true);
         patchDoc.ApplyTo(employeeToPatch);
 
+        TryValidateModel(employeeToPatch);
+
+        if (!ModelState.IsValid)
+            return UnprocessableEntity(ModelState);
+
         serviceManager.Employee.SaveChangesForPatch(employeeToPatch, employee);
         return NoContent();
     }
