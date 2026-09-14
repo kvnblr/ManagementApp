@@ -42,6 +42,15 @@ internal sealed class EmployeeService(
         return employeeDto;
     }
 
+    public (EmployeeForUpdateDto employeeToPatch, Employee employee) GetEmployeeForPatch(Guid companyId, Guid id, bool companyTrackChanges, bool employeeTrackChanges)
+    {
+        var company = repositoryManager.Company.GetCompany(companyId, companyTrackChanges) ?? throw new CompanyNotFoundException(companyId);
+        var employee = repositoryManager.Employee.GetEmployee(companyId, id, employeeTrackChanges) ?? throw new EmployeeNotFoundException(id);
+
+        var employeeToPatch = mapper.Map<EmployeeForUpdateDto>(employee);
+        return (employeeToPatch, employee);
+    }
+
     public IEnumerable<EmployeeDto> GetEmployees(Guid companyId, bool trackChanges)
     {
         loggerManager.LogInfo("Getting employees...");
