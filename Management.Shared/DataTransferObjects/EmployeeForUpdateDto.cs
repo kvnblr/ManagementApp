@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Management.Shared.DataTransferObjects;
 
 public record EmployeeForUpdateDto
