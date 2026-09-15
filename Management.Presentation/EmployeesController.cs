@@ -10,41 +10,41 @@ namespace Management.Presentation;
 public class EmployeesController(IServiceManager serviceManager) : ControllerBase
 {
     [HttpGet]
-    public IActionResult GetEmployeesForCompany(Guid companyId)
+    public async Task<IActionResult> GetEmployeesForCompany(Guid companyId)
     {
-        var employees = serviceManager.Employee.GetEmployees(companyId, trackChanges: false);
+        var employees = await serviceManager.Employee.GetEmployeesAsync(companyId, trackChanges: false);
         return Ok(employees);
     }
 
     [HttpGet("{id:guid}", Name = nameof(GetEmployeeForCompany))]
-    public IActionResult GetEmployeeForCompany(Guid companyId, Guid id)
+    public async Task<IActionResult> GetEmployeeForCompany(Guid companyId, Guid id)
     {
-        var employee = serviceManager.Employee.GetEmployee(companyId, id, trackChanges: false);
+        var employee = await serviceManager.Employee.GetEmployeeAsync(companyId, id, trackChanges: false);
         return Ok(employee);
     }
 
     [HttpPost]
-    public IActionResult CreateEmployeeForCompany(Guid companyId, [FromBody] EmployeeForCreationDto employeeForCreation)
+    public async Task<IActionResult> CreateEmployeeForCompany(Guid companyId, [FromBody] EmployeeForCreationDto employeeForCreation)
     {
         if (employeeForCreation is null) return BadRequest("EmployeeForCreation object is null");
 
         if (!ModelState.IsValid)
             return UnprocessableEntity(ModelState);
 
-        var employee = serviceManager.Employee.CreateEmployeeForCompany(companyId, employeeForCreation, trackChanges: false);
+        var employee = await serviceManager.Employee.CreateEmployeeForCompanyAsync(companyId, employeeForCreation, trackChanges: false);
 
         return CreatedAtRoute(nameof(GetEmployeeForCompany), new { companyId, id = employee.Id }, employee);
     }
 
     [HttpDelete("{id:guid}")]
-    public IActionResult DeleteEmployeeForCompany(Guid companyId, Guid id)
+    public async Task<IActionResult> DeleteEmployeeForCompany(Guid companyId, Guid id)
     {
-        serviceManager.Employee.DeleteEmployeeForCompany(companyId, id, trackChanges: false);
+        await serviceManager.Employee.DeleteEmployeeForCompanyAsync(companyId, id, trackChanges: false);
         return NoContent();
     }
 
     [HttpPut("{id:guid}")]
-    public IActionResult UpdateEmployeeForCompany(Guid companyId, Guid id, [FromBody] EmployeeForUpdateDto employee)
+    public async Task<IActionResult> UpdateEmployeeForCompany(Guid companyId, Guid id, [FromBody] EmployeeForUpdateDto employee)
     {
         if (employee is null)
             return BadRequest("EmployeeForUpdateDto object is null.");
@@ -52,15 +52,15 @@ public class EmployeesController(IServiceManager serviceManager) : ControllerBas
         if (!ModelState.IsValid)
             return UnprocessableEntity(ModelState);
 
-        serviceManager.Employee.UpdateEmployeeForCompany(companyId, id, employee, employeeTrackChanges: false, companyTrackChanges: true);
+        await serviceManager.Employee.UpdateEmployeeForCompanyAsync(companyId, id, employee, employeeTrackChanges: false, companyTrackChanges: true);
         return NoContent();
     }
 
     [HttpPatch("{id:guid}")]
-    public IActionResult PartiallyUpdateEmployeeForCompany(Guid companyId, Guid id, [FromBody] JsonPatchDocument<EmployeeForUpdateDto> patchDoc)
+    public async Task<IActionResult> PartiallyUpdateEmployeeForCompany(Guid companyId, Guid id, [FromBody] JsonPatchDocument<EmployeeForUpdateDto> patchDoc)
     {
         if (patchDoc is null) return BadRequest("patchDoc object sent from client is null.");
-        var (employeeToPatch, employee) = serviceManager.Employee.GetEmployeeForPatch(companyId, id, companyTrackChanges: false, employeeTrackChanges: true);
+        var (employeeToPatch, employee) = await serviceManager.Employee.GetEmployeeForPatchAsync(companyId, id, companyTrackChanges: false, employeeTrackChanges: true);
         patchDoc.ApplyTo(employeeToPatch);
 
         TryValidateModel(employeeToPatch);
@@ -68,7 +68,7 @@ public class EmployeesController(IServiceManager serviceManager) : ControllerBas
         if (!ModelState.IsValid)
             return UnprocessableEntity(ModelState);
 
-        serviceManager.Employee.SaveChangesForPatch(employeeToPatch, employee);
+        await serviceManager.Employee.SaveChangesForPatchAsync(employeeToPatch, employee);
         return NoContent();
     }
 }

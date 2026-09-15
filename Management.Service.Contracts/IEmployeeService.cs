@@ -12,4 +12,12 @@ public interface IEmployeeService
     void UpdateEmployeeForCompany(Guid companyId, Guid id, EmployeeForUpdateDto employeeForUpdate, bool employeeTrackChanges, bool companyTrackChanges);
     (EmployeeForUpdateDto employeeToPatch, Employee employee) GetEmployeeForPatch(Guid companyId, Guid id, bool companyTrackChanges, bool employeeTrackChanges);
     void SaveChangesForPatch(EmployeeForUpdateDto employeeToPatch, Employee employee);
+
+    Task<IEnumerable<EmployeeDto>> GetEmployeesAsync(Guid companyId, bool trackChanges);
+    Task<EmployeeDto> GetEmployeeAsync(Guid companyId, Guid id, bool trackChanges);
+    Task<EmployeeDto> CreateEmployeeForCompanyAsync(Guid companyId, EmployeeForCreationDto employeeForCreation, bool trackChanges);
+    Task DeleteEmployeeForCompanyAsync(Guid companyId, Guid id, bool trackChanges);
+    Task UpdateEmployeeForCompanyAsync(Guid companyId, Guid id, EmployeeForUpdateDto employeeForUpdate, bool employeeTrackChanges, bool companyTrackChanges);
+    Task<(EmployeeForUpdateDto employeeToPatch, Employee employee)> GetEmployeeForPatchAsync(Guid companyId, Guid id, bool companyTrackChanges, bool employeeTrackChanges);
+    Task SaveChangesForPatchAsync(EmployeeForUpdateDto employeeToPatch, Employee employee);
 }
