@@ -1,6 +1,7 @@
 using Management.Presentation.ActionFilters;
 using Management.Service.Contracts;
 using Management.Shared.DataTransferObjects;
+using Management.Shared.RequestFeatures;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +12,7 @@ namespace Management.Presentation;
 public class EmployeesController(IServiceManager serviceManager) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetEmployeesForCompany(Guid companyId)
+    public async Task<IActionResult> GetEmployeesForCompany(Guid companyId, [FromQuery] EmployeeParameters employeesParameters)
     {
         var employees = await serviceManager.Employee.GetEmployeesAsync(companyId, trackChanges: false);
         return Ok(employees);
