@@ -12,9 +12,9 @@ namespace Management.Presentation;
 public class EmployeesController(IServiceManager serviceManager) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetEmployeesForCompany(Guid companyId, [FromQuery] EmployeeParameters employeesParameters)
+    public async Task<IActionResult> GetEmployeesForCompany(Guid companyId, [FromQuery] EmployeeParameters employeesParameter)
     {
-        var employees = await serviceManager.Employee.GetEmployeesAsync(companyId, trackChanges: false);
+        var employees = await serviceManager.Employee.GetEmployeesWithParametersAsync(companyId, employeesParameter, trackChanges: false);
         return Ok(employees);
     }
 
