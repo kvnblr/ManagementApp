@@ -1,6 +1,6 @@
 using Management.Api.Extensions;
 using Management.Contracts;
-using Management.Presentation;
+using Management.Presentation.ActionFilters;
 using Microsoft.AspNetCore.HttpOverrides;
 using NLog;
 
@@ -14,6 +14,7 @@ builder.Services.ConfigureLogging();
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureDbContext(builder.Configuration);
+builder.Services.AddScoped<ValidationFilterAttribute>();
 builder.Services.ConfigureControllers();
 
 var app = builder.Build();
