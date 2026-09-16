@@ -1,5 +1,6 @@
 using Management.Entities.Models;
 using Management.Shared.DataTransferObjects;
+using Management.Shared.RequestFeatures;
 
 namespace Management.Service.Contracts;
 
@@ -13,6 +14,7 @@ public interface IEmployeeService
     (EmployeeForUpdateDto employeeToPatch, Employee employee) GetEmployeeForPatch(Guid companyId, Guid id, bool companyTrackChanges, bool employeeTrackChanges);
     void SaveChangesForPatch(EmployeeForUpdateDto employeeToPatch, Employee employee);
 
+    Task<IEnumerable<EmployeeDto>> GetEmployeesWithParametersAsync(Guid companyId, EmployeeParameters employeeParameters, bool trackChanges);
     Task<IEnumerable<EmployeeDto>> GetEmployeesAsync(Guid companyId, bool trackChanges);
     Task<EmployeeDto> GetEmployeeAsync(Guid companyId, Guid id, bool trackChanges);
     Task<EmployeeDto> CreateEmployeeForCompanyAsync(Guid companyId, EmployeeForCreationDto employeeForCreation, bool trackChanges);
