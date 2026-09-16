@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Management.Contracts;
 using Management.Entities.Models;
+using Management.Shared.RequestFeatures;
 
 namespace Management.Repository;
 
@@ -29,4 +30,10 @@ public class EmployeeRepository(RepositoryContext repositoryContext)
         await FindByCondition(e => e.CompanyId.Equals(companyId), trackChanges)
             .OrderBy(e => e.Name).ToListAsync();
 
+    public async Task<IEnumerable<Employee>> GetEmployeesWithParametersAsync(Guid companyId, EmployeeParameters employeeParameters, bool trackChanges) =>
+        await FindByCondition(e => e.CompanyId.Equals(companyId), trackChanges)
+            .OrderBy(e => e.Name)
+            .Skip((employeeParameters.PageNumber - 1) * employeeParameters.PageSize)
+            .Take(employeeParameters.PageSize)
+            .ToListAsync();
 }
