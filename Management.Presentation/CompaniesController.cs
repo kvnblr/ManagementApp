@@ -1,3 +1,4 @@
+using Management.Presentation.ActionFilters;
 using Management.Presentation.ModelBinders;
 using Management.Service.Contracts;
 using Management.Shared.DataTransferObjects;
@@ -39,10 +40,9 @@ public class CompaniesController(IServiceManager service) : ControllerBase
     }
 
     [HttpPost]
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
     public async Task<IActionResult> CreateCompany([FromBody] CompanyForCreationDto companyForCreation)
     {
-        if (companyForCreation is null) return BadRequest("CompanyForCreationDto object is null");
-
         var company = await service.Company.CreateCompanyAsync(companyForCreation);
         return CreatedAtRoute("CompanyById", new { id = company.Id }, company);
     }
@@ -55,9 +55,9 @@ public class CompaniesController(IServiceManager service) : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
     public async Task<IActionResult> UpdateCompany(Guid id, [FromBody] CompanyForUpdateDto company)
     {
-        if (company is null) return BadRequest("CompanyForUpdateDto object is null.");
         await service.Company.UpdateCompanyAsync(id, company, trackChanges: true);
         return NoContent();
     }
