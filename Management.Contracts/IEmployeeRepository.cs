@@ -1,4 +1,5 @@
 using Management.Entities.Models;
+using Management.Shared.RequestFeatures;
 
 namespace Management.Contracts;
 
