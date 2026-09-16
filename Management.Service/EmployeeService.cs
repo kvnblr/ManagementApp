@@ -4,6 +4,7 @@ using Management.Entities.Exceptions;
 using Management.Entities.Models;
 using Management.Service.Contracts;
 using Management.Shared.DataTransferObjects;
+using Management.Shared.RequestFeatures;
 
 namespace Management.Service;
 
@@ -104,6 +105,14 @@ internal sealed class EmployeeService(
         var company = await repositoryManager.Company.GetCompanyAsync(companyId, trackChanges) ?? throw new CompanyNotFoundException(companyId);
         var employees = await repositoryManager.Employee.GetEmployeesAsync(companyId, trackChanges);
         var employeesDto = mapper.Map<IEnumerable<EmployeeDto>>(employees);
+        return employeesDto;
+    }
+
+    public async Task<IEnumerable<EmployeeDto>> GetEmployeesWithParametersAsync(Guid companyId, EmployeeParameters employeeParameters, bool trackChanges)
+    {
+        var company = await repositoryManager.Company.GetCompanyAsync(companyId, trackChanges) ?? throw new CompanyNotFoundException(companyId);
+        var employee = await repositoryManager.Employee.GetEmployeesWithParametersAsync(companyId, employeeParameters, trackChanges);
+        var employeesDto = mapper.Map<IEnumerable<EmployeeDto>>(employee);
         return employeesDto;
     }
 
