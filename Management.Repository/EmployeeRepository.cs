@@ -41,9 +41,14 @@ public class EmployeeRepository(RepositoryContext repositoryContext)
     {
         var employees = await FindByCondition(e => e.CompanyId.Equals(companyId), trackChanges)
             .OrderBy(e => e.Name)
+            .Skip((employeeParameters.PageNumber - 1) * employeeParameters.PageSize)
+            .Take(employeeParameters.PageSize)
             .ToListAsync();
 
-        return PagedList<Employee>
-                .ToPagedList(employees, employeeParameters.PageNumber, employeeParameters.PageSize);
+        var count = await FindByCondition(e => e.CompanyId.Equals(companyId), trackChanges).CountAsync();
+
+        // return PagedList<Employee>
+        //         .ToPagedList(employees, employeeParameters.PageNumber, employeeParameters.PageSize);
+        return new PagedList<Employee>(employees, count, employeeParameters.PageNumber, employeeParameters.PageSize);
     }
 }
