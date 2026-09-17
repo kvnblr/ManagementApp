@@ -14,6 +14,7 @@ public interface IEmployeeService
     (EmployeeForUpdateDto employeeToPatch, Employee employee) GetEmployeeForPatch(Guid companyId, Guid id, bool companyTrackChanges, bool employeeTrackChanges);
     void SaveChangesForPatch(EmployeeForUpdateDto employeeToPatch, Employee employee);
 
+    Task<(IEnumerable<EmployeeDto> employeesDto, MetaData metaData)> GetEmployeesWithParametersReturnTupleAsync(Guid companyId, EmployeeParameters employeeParameters, bool trackChanges);
     Task<IEnumerable<EmployeeDto>> GetEmployeesWithParametersAsync(Guid companyId, EmployeeParameters employeeParameters, bool trackChanges);
     Task<IEnumerable<EmployeeDto>> GetEmployeesAsync(Guid companyId, bool trackChanges);
     Task<EmployeeDto> GetEmployeeAsync(Guid companyId, Guid id, bool trackChanges);
