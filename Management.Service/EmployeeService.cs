@@ -116,6 +116,14 @@ internal sealed class EmployeeService(
         return employeesDto;
     }
 
+    public async Task<(IEnumerable<EmployeeDto> employeesDto, MetaData metaData)> GetEmployeesWithParametersReturnTupleAsync(Guid companyId, EmployeeParameters employeeParameters, bool trackChanges)
+    {
+        var company = await repositoryManager.Company.GetCompanyAsync(companyId, trackChanges) ?? throw new CompanyNotFoundException(companyId);
+        var employees = await repositoryManager.Employee.GetEmployeesWithParametersReturnPageListAsync(companyId, employeeParameters, trackChanges);
+        var employeesDto = mapper.Map<IEnumerable<EmployeeDto>>(employees);
+        return (employeesDto, employees.MetaData);
+    }
+
     public void SaveChangesForPatch(EmployeeForUpdateDto employeeToPatch, Employee employee)
     {
         mapper.Map(employeeToPatch, employee);
