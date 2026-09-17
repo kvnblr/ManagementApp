@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Management.Presentation.ActionFilters;
 using Management.Service.Contracts;
 using Management.Shared.DataTransferObjects;
@@ -12,10 +13,13 @@ namespace Management.Presentation;
 public class EmployeesController(IServiceManager serviceManager) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetEmployeesForCompany(Guid companyId, [FromQuery] EmployeeParameters employeesParameter)
+    public async Task<IActionResult> GetEmployeesForCompany(Guid companyId, [FromQuery] EmployeeParameters employeeParameters)
     {
-        var employees = await serviceManager.Employee.GetEmployeesWithParametersAsync(companyId, employeesParameter, trackChanges: false);
-        return Ok(employees);
+        // var employees = await serviceManager.Employee.GetEmployeesWithParametersAsync(companyId, employeeParameters, trackChanges: false);
+        // return Ok(employees);
+        var (employeesDto, metaData) = await serviceManager.Employee.GetEmployeesWithParametersReturnTupleAsync(companyId, employeeParameters, trackChanges: false);
+        Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metaData));
+        return Ok(employeesDto);
     }
 
     [HttpGet("{id:guid}", Name = nameof(GetEmployeeForCompany))]
