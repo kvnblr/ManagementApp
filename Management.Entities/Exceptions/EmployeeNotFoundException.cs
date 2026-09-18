@@ -1,4 +1,3 @@
-
 namespace Management.Entities.Exceptions;
 
 public sealed class EmployeeNotFoundException(Guid id)

@@ -1,7 +1,6 @@
 using System.Net;
 using Management.Contracts;
 using Management.Entities.ErrorDetails;
-using Management.Entities.ErrorModels.Exceptions;
 using Management.Entities.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 

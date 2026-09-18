@@ -1,4 +1,4 @@
-namespace Management.Entities.ErrorModels.Exceptions;
+namespace Management.Entities.Exceptions;
 
 public class BadRequestException : Exception
 {

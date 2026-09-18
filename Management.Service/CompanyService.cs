@@ -1,6 +1,5 @@
 using AutoMapper;
 using Management.Contracts;
-using Management.Entities.ErrorModels.Exceptions;
 using Management.Entities.Exceptions;
 using Management.Entities.Models;
 using Management.Service.Contracts;

@@ -1,4 +1,4 @@
-namespace Management.Entities.ErrorModels.Exceptions;
+namespace Management.Entities.Exceptions;
 
 public sealed class CompanyCollectionBadRequest()
     : BadRequestException("Company collection sent from a client is null")
