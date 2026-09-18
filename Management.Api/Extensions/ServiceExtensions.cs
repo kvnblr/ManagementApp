@@ -22,8 +22,7 @@ public static class ServiceExtensions
                     builder.AllowAnyOrigin()
                         .AllowAnyMethod()
                         .AllowAnyHeader()
-                        .WithExposedHeaders("X-Pagination")
-                        ));
+                        .WithExposedHeaders("X-Pagination")));
 
     public static void ConfigureLogging(this IServiceCollection services) =>
         services.AddSingleton<ILoggerManager, LoggerManager>();
