@@ -13,7 +13,7 @@ public class ServiceManager(
     private readonly Lazy<ICompanyService> _companyService =
         new(() => new CompanyService(repositoryManager, loggerManager, mapper));
     private readonly Lazy<IEmployeeService> _employeeService =
-        new(() => new EmployeeService(repositoryManager, loggerManager, mapper));
+        new(() => new EmployeeService(repositoryManager, loggerManager, mapper, dataShaper));
 
     public ICompanyService Company => _companyService.Value;
 
