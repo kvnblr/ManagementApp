@@ -13,6 +13,7 @@ namespace Management.Presentation;
 public class EmployeesController(IServiceManager serviceManager) : ControllerBase
 {
     [HttpGet]
+    [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
     public async Task<IActionResult> GetEmployeesForCompany(Guid companyId, [FromQuery] EmployeeParameters employeeParameters)
     {
         var (employeesDto, metaData) = await serviceManager.Employee.GetEmployeesWithParametersReturnTupleGenericAsync(companyId, employeeParameters, trackChanges: false);
