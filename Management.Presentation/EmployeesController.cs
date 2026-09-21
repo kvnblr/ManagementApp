@@ -15,7 +15,7 @@ public class EmployeesController(IServiceManager serviceManager) : ControllerBas
     [HttpGet]
     public async Task<IActionResult> GetEmployeesForCompany(Guid companyId, [FromQuery] EmployeeParameters employeeParameters)
     {
-        var (employeesDto, metaData) = await serviceManager.Employee.GetEmployeesWithParametersReturnTupleAsync(companyId, employeeParameters, trackChanges: false);
+        var (employeesDto, metaData) = await serviceManager.Employee.GetEmployeesWithParametersReturnTupleGenericAsync(companyId, employeeParameters, trackChanges: false);
         Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metaData));
         return Ok(employeesDto);
     }

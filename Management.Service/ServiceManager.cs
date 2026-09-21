@@ -1,13 +1,15 @@
 using AutoMapper;
 using Management.Contracts;
 using Management.Service.Contracts;
+using Management.Shared.DataTransferObjects;
 
 namespace Management.Service;
 
 public class ServiceManager(
         IRepositoryManager repositoryManager,
         ILoggerManager loggerManager,
-        IMapper mapper)
+        IMapper mapper,
+        IDataShaper<EmployeeDto> dataShaper)
     : IServiceManager
 {
     private readonly Lazy<ICompanyService> _companyService =
