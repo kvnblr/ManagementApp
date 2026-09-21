@@ -1,6 +1,7 @@
 using System.Dynamic;
 using System.Reflection;
 using Management.Contracts;
+using Management.Entities.Models;
 
 namespace Management.Service;
 
@@ -58,6 +59,18 @@ public class DataShaper<T> : IDataShaper<T> where T : class
         return shapedData;
     }
 
+
+    private static IEnumerable<ShapedEntity> FetchShapedData(IEnumerable<T> entities, IEnumerable<PropertyInfo> requiredProperties)
+    {
+        var shapedData = new List<ShapedEntity>();
+        foreach (var entity in entities)
+        {
+            var shapedObject = FetchShapedDataForEntity(entity, requiredProperties);
+            shapedData.Add(shapedObject);
+        }
+        return shapedData;
+    }
+
     private static ExpandoObject FetchDataForEntity(T entity, IEnumerable<PropertyInfo> requiredProperties)
     {
         var shapedObject = new ExpandoObject();
@@ -68,5 +81,32 @@ public class DataShaper<T> : IDataShaper<T> where T : class
             return shapedObject;
         }
         return shapedObject;
+    }
+
+    private static ShapedEntity FetchShapedDataForEntity(T entity, IEnumerable<PropertyInfo> requiredProperties)
+    {
+        var shapedObject = new ShapedEntity();
+        foreach (var property in requiredProperties)
+        {
+            var objectPropertyValue = property.GetValue(entity);
+            shapedObject.Entity.TryAdd(property.Name, objectPropertyValue);
+        }
+
+        var objectProperty = entity.GetType().GetProperty("Id");
+        shapedObject.Id = (Guid)objectProperty.GetValue(entity);
+
+        return shapedObject;
+    }
+
+    public IEnumerable<ShapedEntity> ShapedData(IEnumerable<T> entities, string fieldString)
+    {
+        var requiredProperties = GetRequiredProperties(fieldString);
+        return FetchShapedData(entities, requiredProperties);
+    }
+
+    public ShapedEntity ShapedData(T entity, string fieldString)
+    {
+        var requiredProperties = GetRequiredProperties(fieldString);
+        return FetchShapedDataForEntity(entity, requiredProperties);
     }
 }
