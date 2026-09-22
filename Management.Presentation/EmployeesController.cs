@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Management.Entities.LinkModels;
 using Management.Presentation.ActionFilters;
 using Management.Service.Contracts;
 using Management.Shared.DataTransferObjects;
@@ -16,9 +17,12 @@ public class EmployeesController(IServiceManager serviceManager) : ControllerBas
     [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
     public async Task<IActionResult> GetEmployeesForCompany(Guid companyId, [FromQuery] EmployeeParameters employeeParameters)
     {
-        var (employeesDto, metaData) = await serviceManager.Employee.GetEmployeesWithParametersReturnTupleGenericAsync(companyId, employeeParameters, trackChanges: false);
+        var linkParams = new LinkParameters(employeeParameters, HttpContext);
+        var (employees, metaData) = await serviceManager.Employee.GetEmployeesWithParametersReturnTupleLinkResponseAsync(companyId, linkParams, trackChanges: false);
+        // var (employeesDto, metaData) = await serviceManager.Employee.GetEmployeesWithParametersReturnTupleGenericAsync(companyId, employeeParameters, trackChanges: false);
         Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metaData));
-        return Ok(employeesDto);
+        // return Ok(employeesDto);
+        return Ok(employees);
     }
 
     [HttpGet("{id:guid}", Name = nameof(GetEmployeeForCompany))]
