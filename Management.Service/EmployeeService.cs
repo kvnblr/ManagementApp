@@ -2,6 +2,7 @@ using System.Dynamic;
 using AutoMapper;
 using Management.Contracts;
 using Management.Entities.Exceptions;
+using Management.Entities.LinkModels;
 using Management.Entities.Models;
 using Management.Service.Contracts;
 using Management.Shared.DataTransferObjects;
@@ -13,7 +14,8 @@ internal sealed class EmployeeService(
         IRepositoryManager repositoryManager,
         ILoggerManager loggerManager,
         IMapper mapper,
-        IDataShaper<EmployeeDto> dataShaper)
+        IDataShaper<EmployeeDto> dataShaper,
+        IEmployeeLinks employeeLinks)
     : IEmployeeService
 {
     public EmployeeDto CreateEmployeeForCompany(Guid companyId, EmployeeForCreationDto employeeForCreation, bool trackChanges)
@@ -163,5 +165,15 @@ internal sealed class EmployeeService(
         var employees = await repositoryManager.Employee.GetEmployeesWithParametersReturnPageListAsync(companyId, employeeParameters, trackChanges);
         var employeesDto = mapper.Map<IEnumerable<EmployeeDto>>(employees);
         return (employeesDto, employees.MetaData);
+    }
+
+    public async Task<(LinkResponse linkResponse, MetaData metaData)> GetEmployeesWithParametersReturnTupleLinkResponseAsync(Guid companyId, LinkParameters linkParameters, bool trackChanges)
+    {
+        if (!linkParameters.EmployeeParameters.ValidAgeRange) throw new MaxAgeRangeBadRequestException();
+        var company = await repositoryManager.Company.GetCompanyAsync(companyId, trackChanges) ?? throw new CompanyNotFoundException(companyId);
+        var employees = await repositoryManager.Employee.GetEmployeesWithParametersReturnPageListAsync(companyId, linkParameters.EmployeeParameters, trackChanges);
+        var employeesDto = mapper.Map<IEnumerable<EmployeeDto>>(employees);
+        var linkResponse = employeeLinks.TryGenerateLinks(employeesDto, linkParameters.EmployeeParameters.Fields, companyId, linkParameters.Context);
+        return (linkResponse, employees.MetaData);
     }
 }
