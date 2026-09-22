@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\Management.Entities\Management.Entities.csproj" />
     <ProjectReference Include="..\Management.Shared\Management.Shared.csproj" />
+    <ProjectReference Include="..\Management.Entities\Management.Entities.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
