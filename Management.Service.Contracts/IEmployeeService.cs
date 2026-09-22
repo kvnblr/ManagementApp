@@ -1,4 +1,5 @@
 using System.Dynamic;
+using Management.Entities.LinkModels;
 using Management.Entities.Models;
 using Management.Shared.DataTransferObjects;
 using Management.Shared.RequestFeatures;
@@ -17,6 +18,7 @@ public interface IEmployeeService
 
     Task<(IEnumerable<EmployeeDto> employeesDto, MetaData metaData)> GetEmployeesWithParametersReturnTupleAsync(Guid companyId, EmployeeParameters employeeParameters, bool trackChanges);
     Task<(IEnumerable<ExpandoObject> employeesDto, MetaData metaData)> GetEmployeesWithParametersReturnTupleGenericAsync(Guid companyId, EmployeeParameters employeeParameters, bool trackChanges);
+    Task<(LinkResponse linkResponse, MetaData metaData)> GetEmployeesWithParametersReturnTupleLinkResponseAsync(Guid companyId, LinkParameters linkParameters, bool trackChanges);
 
     Task<IEnumerable<EmployeeDto>> GetEmployeesWithParametersAsync(Guid companyId, EmployeeParameters employeeParameters, bool trackChanges);
     Task<IEnumerable<EmployeeDto>> GetEmployeesAsync(Guid companyId, bool trackChanges);
