@@ -1,5 +1,6 @@
 using System.Reflection.Metadata;
 using Management.Api.Formatter;
+using Management.Api.Utility;
 using Management.Contracts;
 using Management.Entities.Models;
 using Management.Repository;
@@ -32,6 +33,9 @@ public static class ServiceExtensions
 
     public static void ConfigureServiceManager(this IServiceCollection services) =>
         services.AddScoped<IServiceManager, ServiceManager>();
+
+    public static void ConfigureEmployeeLinks(this IServiceCollection services) =>
+        services.AddScoped<IEmployeeLinks, EmployeeLinks>();
 
     public static void ConfigureDataShaper(this IServiceCollection services) =>
         services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
