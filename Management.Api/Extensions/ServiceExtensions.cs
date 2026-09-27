@@ -90,7 +90,8 @@ public static class ServiceExtensions
     public static void ConfigureOutputCaching(this IServiceCollection services) =>
         services.AddOutputCache(options =>
         {
-            options.AddBasePolicy(policy => policy.Expire(TimeSpan.FromSeconds(10)));
+            // options.AddBasePolicy(policy => policy.Expire(TimeSpan.FromSeconds(10)));
+            options.AddPolicy("120SecondsDuration", p => p.Expire(TimeSpan.FromSeconds(120)));
         });
 
     private static NewtonsoftJsonInputFormatter GetJsonPatchInputFormatter() =>

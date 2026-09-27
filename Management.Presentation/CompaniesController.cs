@@ -10,6 +10,7 @@ namespace Management.Presentation;
 [ApiController]
 [Route("api/[controller]")]
 // [ResponseCache(CacheProfileName = "120SecondsDuration")]
+[OutputCache(PolicyName = "120SecondsDuration")]
 public class CompaniesController(IServiceManager service) : ControllerBase
 {
 
