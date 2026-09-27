@@ -88,7 +88,10 @@ public static class ServiceExtensions
         services.AddResponseCaching();
 
     public static void ConfigureOutputCaching(this IServiceCollection services) =>
-        services.AddOutputCache();
+        services.AddOutputCache(options =>
+        {
+            options.AddBasePolicy(policy => policy.Expire(TimeSpan.FromSeconds(10)));
+        });
 
     private static NewtonsoftJsonInputFormatter GetJsonPatchInputFormatter() =>
         new ServiceCollection().AddLogging().AddMvc().AddNewtonsoftJson()
