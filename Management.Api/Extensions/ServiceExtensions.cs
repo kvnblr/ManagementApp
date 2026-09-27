@@ -1,4 +1,5 @@
 using System.Reflection.Metadata;
+using Asp.Versioning;
 using Management.Api.Formatter;
 using Management.Api.Utility;
 using Management.Contracts;
@@ -68,6 +69,14 @@ public static class ServiceExtensions
             cfg.CreateMap<EmployeeForCreationDto, Employee>();
             cfg.CreateMap<EmployeeForUpdateDto, Employee>().ReverseMap();
         }, typeof(Program));
+
+    public static void ConfigureVersioning(this IServiceCollection services) =>
+        services.AddApiVersioning(options =>
+        {
+            options.ReportApiVersions = true;
+            options.AssumeDefaultVersionWhenUnspecified = true;
+            options.DefaultApiVersion = new ApiVersion(1, 0);
+        }).AddMvc();
 
     private static NewtonsoftJsonInputFormatter GetJsonPatchInputFormatter() =>
         new ServiceCollection().AddLogging().AddMvc().AddNewtonsoftJson()
