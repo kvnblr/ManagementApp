@@ -54,9 +54,10 @@ public static class ServiceExtensions
             cfg.RespectBrowserAcceptHeader = true;
             cfg.ReturnHttpNotAcceptable = true;
             cfg.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
+            cfg.CacheProfiles.Add("120SecondsDuration", new CacheProfile { Duration = 120 });
         }).AddXmlSerializerFormatters()
             .AddCustomCsvFormatter()
-            .AddApplicationPart(typeof(AssemblyReference).Assembly);
+            .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
 
     public static void ConfigureAutoMapping(this IServiceCollection services) =>
         services.AddAutoMapper(cfg =>
