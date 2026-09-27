@@ -16,6 +16,7 @@ builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureDataShaper();
 builder.Services.ConfigureEmployeeLinks();
 builder.Services.ConfigureVersioning();
+builder.Services.ConfigureResponseCaching();
 builder.Services.ConfigureDbContext(builder.Configuration);
 builder.Services.AddScoped<ValidationFilterAttribute>();
 builder.Services.ConfigureControllers();
@@ -32,6 +33,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.All });
 app.UseCors("CorsPolicy");
+app.UseResponseCaching();
 app.MapControllers();
 app.Run();
 
