@@ -27,6 +27,8 @@ public class CompaniesController(IServiceManager service) : ControllerBase
     public async Task<IActionResult> GetCompany(Guid id)
     {
         var company = await service.Company.GetCompanyAsync(id, trackChanges: false);
+        var etag = $"\"{Guid.NewGuid():n}\"";
+        HttpContext.Response.Headers.ETag = etag;
         return Ok(company);
     }
 
