@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Management.Presentation;
 
-[ApiVersion("2.0")]
 [Route("api/{v:apiversion}/companies")]
 [ApiController]
 public class CompaniesV2Controller(IServiceManager serviceManager) : ControllerBase
