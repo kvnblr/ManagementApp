@@ -3,12 +3,13 @@ using Management.Presentation.ModelBinders;
 using Management.Service.Contracts;
 using Management.Shared.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace Management.Presentation;
 
 [ApiController]
 [Route("api/[controller]")]
-[ResponseCache(CacheProfileName = "120SecondsDuration")]
+// [ResponseCache(CacheProfileName = "120SecondsDuration")]
 public class CompaniesController(IServiceManager service) : ControllerBase
 {
 
@@ -20,7 +21,8 @@ public class CompaniesController(IServiceManager service) : ControllerBase
     }
 
     [HttpGet("{id:guid}", Name = "CompanyById")]
-    [ResponseCache(Duration = 60)]
+    // [ResponseCache(Duration = 60)]
+    [OutputCache(Duration = 60)]
     public async Task<IActionResult> GetCompany(Guid id)
     {
         var company = await service.Company.GetCompanyAsync(id, trackChanges: false);
