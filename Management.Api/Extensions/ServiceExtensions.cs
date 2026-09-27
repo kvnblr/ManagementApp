@@ -4,6 +4,7 @@ using Management.Api.Formatter;
 using Management.Api.Utility;
 using Management.Contracts;
 using Management.Entities.Models;
+using Management.Presentation;
 using Management.Repository;
 using Management.Service;
 using Management.Service.Contracts;
@@ -76,7 +77,11 @@ public static class ServiceExtensions
             options.ReportApiVersions = true;
             options.AssumeDefaultVersionWhenUnspecified = true;
             options.DefaultApiVersion = new ApiVersion(1, 0);
-        }).AddMvc();
+        }).AddMvc(options =>
+        {
+            options.Conventions.Controller<CompaniesController>().HasApiVersion(new ApiVersion(1, 0));
+            options.Conventions.Controller<CompaniesV2Controller>().HasDeprecatedApiVersion(new ApiVersion(2, 0));
+        });
 
     private static NewtonsoftJsonInputFormatter GetJsonPatchInputFormatter() =>
         new ServiceCollection().AddLogging().AddMvc().AddNewtonsoftJson()
