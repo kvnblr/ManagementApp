@@ -83,6 +83,9 @@ public static class ServiceExtensions
             options.Conventions.Controller<CompaniesV2Controller>().HasDeprecatedApiVersion(new ApiVersion(2, 0));
         });
 
+    public static void ConfigureResponseCaching(this IServiceCollection services) =>
+        services.AddResponseCaching();
+
     private static NewtonsoftJsonInputFormatter GetJsonPatchInputFormatter() =>
         new ServiceCollection().AddLogging().AddMvc().AddNewtonsoftJson()
             .Services.BuildServiceProvider().GetRequiredService<IOptions<MvcOptions>>().Value.InputFormatters
