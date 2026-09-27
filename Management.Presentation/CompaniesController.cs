@@ -1,4 +1,3 @@
-using Asp.Versioning;
 using Management.Presentation.ActionFilters;
 using Management.Presentation.ModelBinders;
 using Management.Service.Contracts;
@@ -20,6 +19,7 @@ public class CompaniesController(IServiceManager service) : ControllerBase
     }
 
     [HttpGet("{id:guid}", Name = "CompanyById")]
+    [ResponseCache(Duration = 60)]
     public async Task<IActionResult> GetCompany(Guid id)
     {
         var company = await service.Company.GetCompanyAsync(id, trackChanges: false);
