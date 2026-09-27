@@ -15,6 +15,7 @@ builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureDataShaper();
 builder.Services.ConfigureEmployeeLinks();
+builder.Services.ConfigureVersioning();
 builder.Services.ConfigureDbContext(builder.Configuration);
 builder.Services.AddScoped<ValidationFilterAttribute>();
 builder.Services.ConfigureControllers();
