@@ -54,7 +54,7 @@ public static class ServiceExtensions
             cfg.RespectBrowserAcceptHeader = true;
             cfg.ReturnHttpNotAcceptable = true;
             cfg.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
-            cfg.CacheProfiles.Add("120SecondsDuration", new CacheProfile { Duration = 120 });
+            // cfg.CacheProfiles.Add("120SecondsDuration", new CacheProfile { Duration = 120 });
         }).AddXmlSerializerFormatters()
             .AddCustomCsvFormatter()
             .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
@@ -86,6 +86,9 @@ public static class ServiceExtensions
 
     public static void ConfigureResponseCaching(this IServiceCollection services) =>
         services.AddResponseCaching();
+
+    public static void ConfigureOutputCaching(this IServiceCollection services) =>
+        services.AddOutputCache();
 
     private static NewtonsoftJsonInputFormatter GetJsonPatchInputFormatter() =>
         new ServiceCollection().AddLogging().AddMvc().AddNewtonsoftJson()
