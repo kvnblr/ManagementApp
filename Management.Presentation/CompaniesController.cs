@@ -4,6 +4,7 @@ using Management.Service.Contracts;
 using Management.Shared.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Management.Presentation;
 
@@ -15,6 +16,7 @@ public class CompaniesController(IServiceManager service) : ControllerBase
 {
 
     [HttpGet]
+    [EnableRateLimiting("SpecificPolicy")]
     public async Task<IActionResult> GetCompanies()
     {
         var companies = await service.Company.GetAllCompaniesAsync(trackChanges: false);
