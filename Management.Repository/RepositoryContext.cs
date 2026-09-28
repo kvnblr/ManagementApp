@@ -13,6 +13,7 @@ public class RepositoryContext(DbContextOptions options) : IdentityDbContext<Use
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfiguration(new CompanyConfiguration());
         modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
+        modelBuilder.ApplyConfiguration(new RoleConfiguration());
     }
 
     public DbSet<Company>? Companies { get; set; }
