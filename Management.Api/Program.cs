@@ -18,6 +18,7 @@ builder.Services.ConfigureEmployeeLinks();
 builder.Services.ConfigureVersioning();
 // builder.Services.ConfigureResponseCaching();
 builder.Services.ConfigureOutputCaching();
+builder.Services.ConfigureRateLimitingOptions();
 builder.Services.ConfigureDbContext(builder.Configuration);
 builder.Services.AddScoped<ValidationFilterAttribute>();
 builder.Services.ConfigureControllers();
@@ -33,6 +34,7 @@ if (app.Environment.IsProduction())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.All });
+app.UseRateLimiter();
 app.UseCors("CorsPolicy");
 // app.UseResponseCaching();
 app.UseOutputCache();
