@@ -19,6 +19,8 @@ builder.Services.ConfigureVersioning();
 // builder.Services.ConfigureResponseCaching();
 builder.Services.ConfigureOutputCaching();
 builder.Services.ConfigureRateLimitingOptions();
+builder.Services.AddAuthentication();
+builder.Services.ConfigureIdentity();
 builder.Services.ConfigureDbContext(builder.Configuration);
 builder.Services.AddScoped<ValidationFilterAttribute>();
 builder.Services.ConfigureControllers();
@@ -38,6 +40,8 @@ app.UseRateLimiter();
 app.UseCors("CorsPolicy");
 // app.UseResponseCaching();
 app.UseOutputCache();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 app.Run();
 
