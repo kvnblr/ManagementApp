@@ -11,6 +11,7 @@ using Management.Service;
 using Management.Service.Contracts;
 using Management.Service.Log;
 using Management.Shared.DataTransferObjects;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
@@ -127,6 +128,19 @@ public static class ServiceExtensions
                             await context.HttpContext.Response.WriteAsync($"Too many request. Please try again later.", token);
                     };
                 });
+
+    public static void ConfigureIdentity(this IServiceCollection services) =>
+        services.AddIdentity<User, IdentityRole>(options =>
+        {
+            options.Password.RequireDigit = true;
+            options.Password.RequireLowercase = true;
+            options.Password.RequireUppercase = true;
+            options.Password.RequireNonAlphanumeric = true;
+            options.Password.RequiredLength = 10;
+            options.User.RequireUniqueEmail = true;
+        })
+        .AddEntityFrameworkStores<RepositoryContext>()
+        .AddDefaultTokenProviders();
 
     private static NewtonsoftJsonInputFormatter GetJsonPatchInputFormatter() =>
         new ServiceCollection().AddLogging().AddMvc().AddNewtonsoftJson()
