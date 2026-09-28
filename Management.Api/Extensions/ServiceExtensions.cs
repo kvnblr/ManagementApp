@@ -1,4 +1,5 @@
 using System.Reflection.Metadata;
+using System.Threading.RateLimiting;
 using Asp.Versioning;
 using Management.Api.Formatter;
 using Management.Api.Utility;
@@ -93,6 +94,39 @@ public static class ServiceExtensions
             // options.AddBasePolicy(policy => policy.Expire(TimeSpan.FromSeconds(10)));
             options.AddPolicy("120SecondsDuration", p => p.Expire(TimeSpan.FromSeconds(120)));
         });
+
+    public static void ConfigureRateLimitingOptions(this IServiceCollection services) =>
+        services.AddRateLimiter(options =>
+                {
+                    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(
+                            context => RateLimitPartition.GetFixedWindowLimiter("GlobalLimiter",
+                                partition => new FixedWindowRateLimiterOptions
+                                {
+                                    AutoReplenishment = true,
+                                    PermitLimit = 5,
+                                    QueueLimit = 2,
+                                    Window = TimeSpan.FromMinutes(1)
+                                }));
+
+                    options.AddPolicy("SpecificPolicy", context =>
+
+                        RateLimitPartition.GetFixedWindowLimiter("SpecificLimiter",
+                                partition => new FixedWindowRateLimiterOptions
+                                {
+                                    AutoReplenishment = true,
+                                    PermitLimit = 3,
+                                    Window = TimeSpan.FromSeconds(10),
+                                }));
+
+                    options.OnRejected = async (context, token) =>
+                    {
+                        context.HttpContext.Response.StatusCode = 429;
+                        if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
+                            await context.HttpContext.Response.WriteAsync($"Too many request. Please try again after {retryAfter.TotalSeconds} seconds(s).", token);
+                        else
+                            await context.HttpContext.Response.WriteAsync($"Too many request. Please try again later.", token);
+                    };
+                });
 
     private static NewtonsoftJsonInputFormatter GetJsonPatchInputFormatter() =>
         new ServiceCollection().AddLogging().AddMvc().AddNewtonsoftJson()
