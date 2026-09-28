@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Management.Shared.DataTransferObjects;
 
-public record UserForRegistration
+public record UserForRegistrationDto
 {
     public string? FirstName { get; init; }
     public string? Lastname { get; init; }
