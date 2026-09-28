@@ -1,7 +1,7 @@
 using Management.Shared.DataTransferObjects;
 using Microsoft.AspNetCore.Identity;
 
-namespace Management.Contracts;
+namespace Management.Service.Contracts;
 
 public interface IAuthenticationService
 {
