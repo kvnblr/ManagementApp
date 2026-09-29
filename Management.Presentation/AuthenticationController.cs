@@ -1,5 +1,6 @@
 using Management.Presentation.ActionFilters;
 using Management.Service.Contracts;
+using Management.Shared;
 using Management.Shared.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,5 +23,15 @@ public class AuthenticationController(IServiceManager service) : ControllerBase
             return BadRequest(ModelState);
         }
         return StatusCode(201);
+    }
+
+    [HttpPost]
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
+    public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDto user)
+    {
+        if (!await service.Authentication.ValidateUser(user)) ;
+        return Unauthorized();
+
+        return Ok(new { Token = await service.Authentication.CreateToken() });
     }
 }
