@@ -59,6 +59,7 @@ public class CompaniesController(IServiceManager service) : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
+    [Authorize(Roles = "Manager")]
     public async Task<IActionResult> DeleteCompany(Guid id)
     {
         await service.Company.DeleteCompanyAsync(id, trackChanges: false);
