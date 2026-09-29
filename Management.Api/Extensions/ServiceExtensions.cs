@@ -1,4 +1,5 @@
 using System.Reflection.Metadata;
+using System.Text;
 using System.Threading.RateLimiting;
 using Asp.Versioning;
 using Management.Api.Formatter;
@@ -11,11 +12,13 @@ using Management.Service;
 using Management.Service.Contracts;
 using Management.Service.Log;
 using Management.Shared.DataTransferObjects;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Management.Api.Extensions;
 
@@ -143,6 +146,32 @@ public static class ServiceExtensions
         })
         .AddEntityFrameworkStores<RepositoryContext>()
         .AddDefaultTokenProviders();
+
+    public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
+    {
+        var jwtSettings = configuration.GetSection("JwtSettings");
+        var secretKey = Environment.GetEnvironmentVariable("SECRET");
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+                .AddJwtBearer(options =>
+                        {
+                            options.TokenValidationParameters = new TokenValidationParameters
+                            {
+                                ValidateIssuer = true,
+                                ValidateAudience = true,
+                                ValidateLifetime = true,
+                                ValidateIssuerSigningKey = true,
+
+                                ValidIssuer = jwtSettings["validIssuer"],
+                                ValidAudience = jwtSettings["validAudience"],
+                                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                            };
+                        });
+    }
 
     private static NewtonsoftJsonInputFormatter GetJsonPatchInputFormatter() =>
         new ServiceCollection().AddLogging().AddMvc().AddNewtonsoftJson()
