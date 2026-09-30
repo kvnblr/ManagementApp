@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using AutoMapper;
 using Management.Contracts;
@@ -43,6 +44,40 @@ public class AuthenticationService(
                 );
 
         return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+    }
+
+    public async Task<TokenDto> CreateToken(bool populateExp)
+    {
+        var key = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SECRET"));
+        var secret = new SymmetricSecurityKey(key);
+        var signingCredentials = new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
+
+        var claims = new List<Claim> { new(ClaimTypes.Name, _user.UserName) };
+        var roles = await userManager.GetRolesAsync(_user);
+        foreach (var role in roles)
+            claims.Add(new Claim(ClaimTypes.Role, role));
+
+        var jwtSettings = configuration.GetSection("JwtSettings");
+        var tokenOptions = new JwtSecurityToken(
+                issuer: jwtSettings["validIssuer"],
+                audience: jwtSettings["validAudience"],
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["expires"])),
+                signingCredentials: signingCredentials
+                );
+
+        var refreshToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
+
+        _user.RefreshToken = refreshToken;
+
+        if (populateExp)
+            _user.RefreshTokenExpireTime = DateTime.Now.AddDays(7);
+
+        await userManager.UpdateAsync(_user);
+
+        var accessToken = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+
+        return new TokenDto(accessToken, refreshToken);
     }
 
     public async Task<IdentityResult> RegisterUser(UserForRegistrationDto userForRegistration)
