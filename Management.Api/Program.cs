@@ -22,6 +22,7 @@ builder.Services.ConfigureRateLimitingOptions();
 builder.Services.AddAuthentication();
 builder.Services.ConfigureIdentity();
 builder.Services.ConfigureJWT(builder.Configuration);
+builder.Services.ConfigureJwtSettings(builder.Configuration);
 builder.Services.ConfigureDbContext(builder.Configuration);
 builder.Services.AddScoped<ValidationFilterAttribute>();
 builder.Services.ConfigureControllers();
