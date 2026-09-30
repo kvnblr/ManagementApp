@@ -1,10 +1,11 @@
 using AutoMapper;
 using Management.Contracts;
+using Management.Entities.ConfigurationModels;
 using Management.Entities.Models;
 using Management.Service.Contracts;
 using Management.Shared.DataTransferObjects;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Management.Service;
 
@@ -15,7 +16,7 @@ public class ServiceManager(
         IDataShaper<EmployeeDto> dataShaper,
         IEmployeeLinks employeeLinks,
         UserManager<User> userManager,
-        IConfiguration configuration)
+        IOptions<JwtConfiguration> configuration)
     : IServiceManager
 {
     private readonly Lazy<ICompanyService> _companyService =

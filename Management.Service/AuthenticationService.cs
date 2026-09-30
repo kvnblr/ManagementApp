@@ -4,13 +4,14 @@ using System.Security.Cryptography;
 using System.Text;
 using AutoMapper;
 using Management.Contracts;
+using Management.Entities.ConfigurationModels;
 using Management.Entities.Exceptions;
 using Management.Entities.Models;
 using Management.Service.Contracts;
 using Management.Shared;
 using Management.Shared.DataTransferObjects;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Management.Service;
@@ -19,14 +20,15 @@ public class AuthenticationService(
         ILoggerManager logger,
         IMapper mapper,
         UserManager<User> userManager,
-        IConfiguration configuration
+        IOptions<JwtConfiguration> configuration
         ) : IAuthenticationService
 {
+    private readonly JwtConfiguration _jwtConfiguration = configuration.Value;
     private User? _user;
 
     public async Task<TokenDto> CreateRefreshToken(TokenDto tokenDto)
     {
-        var jwtSettings = configuration.GetSection("JwtSettings");
+        // var jwtSettings = configuration.GetSection("JwtSettings");
         var tokenValidationParameters = new TokenValidationParameters
         {
             ValidateAudience = true,
@@ -34,8 +36,10 @@ public class AuthenticationService(
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SECRET"))),
             ValidateLifetime = true,
-            ValidIssuer = jwtSettings["validIssuer"],
-            ValidAudience = jwtSettings["validAudience"]
+            // ValidIssuer = jwtSettings["validIssuer"],
+            ValidIssuer = _jwtConfiguration.ValidIssuer,
+            // ValidAudience = jwtSettings["validAudience"]
+            ValidAudience = _jwtConfiguration.ValidAudience
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -65,12 +69,15 @@ public class AuthenticationService(
         foreach (var role in roles)
             claims.Add(new Claim(ClaimTypes.Role, role));
 
-        var jwtSettings = configuration.GetSection("JwtSettings");
+        // var jwtSettings = configuration.GetSection("JwtSettings");
         var tokenOptions = new JwtSecurityToken(
-                issuer: jwtSettings["validIssuer"],
-                audience: jwtSettings["validAudience"],
+                // issuer: jwtSettings["validIssuer"],
+                issuer: _jwtConfiguration.ValidIssuer,
+                // audience: jwtSettings["validAudience"],
+                audience: _jwtConfiguration.ValidAudience,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["expires"])),
+                 // expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["expires"])),
+                 expires: DateTime.Now.AddMinutes(Convert.ToDouble(_jwtConfiguration.Expires)),
                 signingCredentials: signingCredentials
                 );
 
@@ -88,12 +95,15 @@ public class AuthenticationService(
         foreach (var role in roles)
             claims.Add(new Claim(ClaimTypes.Role, role));
 
-        var jwtSettings = configuration.GetSection("JwtSettings");
+        // var jwtSettings = configuration.GetSection("JwtSettings");
         var tokenOptions = new JwtSecurityToken(
-                issuer: jwtSettings["validIssuer"],
-                audience: jwtSettings["validAudience"],
+                // issuer: jwtSettings["validIssuer"],
+                issuer: _jwtConfiguration.ValidIssuer,
+               // audience: jwtSettings["validAudience"],
+               audience: _jwtConfiguration.ValidAudience,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["expires"])),
+                 // expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["expires"])),
+                 expires: DateTime.Now.AddMinutes(Convert.ToDouble(_jwtConfiguration.Expires)),
                 signingCredentials: signingCredentials
                 );
 
