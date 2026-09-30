@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using AutoMapper;
 using Management.Contracts;
+using Management.Entities.Exceptions;
 using Management.Entities.Models;
 using Management.Service.Contracts;
 using Management.Shared;
@@ -22,6 +23,36 @@ public class AuthenticationService(
         ) : IAuthenticationService
 {
     private User? _user;
+
+    public async Task<TokenDto> CreateRefreshToken(TokenDto tokenDto)
+    {
+        var jwtSettings = configuration.GetSection("JwtSettings");
+        var tokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateAudience = true,
+            ValidateIssuer = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SECRET"))),
+            ValidateLifetime = true,
+            ValidIssuer = jwtSettings["validIssuer"],
+            ValidAudience = jwtSettings["validAudience"]
+        };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        SecurityToken securityToken;
+        var principal = tokenHandler.ValidateToken(tokenDto.AccessToken, tokenValidationParameters, out securityToken);
+        var jwtSecurityToken = securityToken as JwtSecurityToken;
+        if (jwtSecurityToken is null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            throw new SecurityTokenException("Invalid Token");
+
+        var user = await userManager.FindByNameAsync(principal.Identity.Name);
+        if (user == null || user.RefreshToken != tokenDto.RefreshToken || user.RefreshTokenExpireTime <= DateTime.Now)
+            throw new RefereshTokenBadRequestException();
+
+        _user = user;
+
+        return await CreateToken(populateExp: false);
+    }
 
     public async Task<string> CreateToken()
     {
