@@ -24,6 +24,7 @@ builder.Services.ConfigureIdentity();
 builder.Services.ConfigureJWT(builder.Configuration);
 builder.Services.ConfigureJwtSettings(builder.Configuration);
 builder.Services.ConfigureDbContext(builder.Configuration);
+builder.Services.ConfigureSwagger();
 builder.Services.AddScoped<ValidationFilterAttribute>();
 builder.Services.ConfigureControllers();
 
@@ -35,6 +36,12 @@ app.ConfigureExceptionHandler(logger);
 if (app.Environment.IsProduction())
     app.UseHsts();
 
+app.UseSwagger();
+app.UseSwaggerUI(s =>
+{
+    s.SwaggerEndpoint("/swagger/v1/swagger.json", "Management API v1");
+    s.SwaggerEndpoint("/swagger/v2/swagger.json", "Management API v2");
+});
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.All });
