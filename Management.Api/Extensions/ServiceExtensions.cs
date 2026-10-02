@@ -187,8 +187,41 @@ public static class ServiceExtensions
     {
         services.AddSwaggerGen(s =>
         {
-            s.SwaggerDoc("v1", new OpenApiInfo { Title = "Management API", Version = "v1" });
+            s.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = "Management API",
+                Version = "v1",
+                Description = "Management API",
+                TermsOfService = new Uri("https://example.com/terms"),
+                Contact = new OpenApiContact
+                {
+                    Name = "",
+                    Email = "",
+                    Url = new Uri("https://example.com")
+                },
+                License = new OpenApiLicense
+                {
+                    Name = "",
+                    Url = new Uri("https://example.com/license")
+                }
+            });
             s.SwaggerDoc("v2", new OpenApiInfo { Title = "Management API", Version = "v2" });
+            s.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Place to add JWT with Bearer",
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer"
+            });
+
+            s.AddSecurityRequirement(document => new OpenApiSecurityRequirement()
+            {
+                {
+                    new OpenApiSecuritySchemeReference("Bearer"),
+                    new List<string>()
+                }
+            });
         });
     }
 
